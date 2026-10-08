@@ -3,8 +3,10 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameObject[] Blocks;
+
     private InputSystem_Actions controls;
-    private float duration = 0.2f;
+    private float duration = 0.1f;
     private bool isMoving;
 
 
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Blocks = GameObject.FindGameObjectsWithTag("Blocks");
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
     }
 
@@ -40,13 +43,28 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector2 direction){
         if (isMoving) return;
 
-        if(canMove(direction)) StartCoroutine(MoveRoutine(direction)); //transform.position += (Vector3)direction;
-        Debug.Log("move " + direction);
+        if(canMove(direction)){
+            StartCoroutine(MoveRoutine(direction)); //transform.position += (Vector3)direction;
+        } else{
+            StartCoroutine(FailMoveRoutine(direction));
+        }
     }
 
     
     private bool canMove(Vector2 direction){
-        
+
+        Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
+
+        foreach(var b in Blocks){
+            if(Vector2Int.RoundToInt(b.transform.position) == target){
+                Push blockPush = b.GetComponent<Push>();
+                if(blockPush && blockPush.Move(direction)){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
         return true; //TODO: check player state and which tile is being moved into
     }
 
@@ -66,6 +84,32 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = endPos;
+        isMoving = false;
+    }
+
+    private IEnumerator FailMoveRoutine(Vector2 direction)
+    {
+        isMoving = true;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = startPos + ((Vector3)direction * 0.3f);
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration*2/3)
+        {
+            elapsedTime += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / (duration/2));
+            yield return null;
+        }
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            transform.position = Vector3.Lerp(endPos, startPos, elapsedTime / (duration/2));
+            yield return null;
+        }
+
+        transform.position = startPos;
         isMoving = false;
     }
 }

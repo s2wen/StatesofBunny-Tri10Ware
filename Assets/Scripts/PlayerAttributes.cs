@@ -78,4 +78,8 @@ public class PlayerAttributes : MonoBehaviour
     public bool getFlight(){
         return _flight;
     }
+
+    public float getSize(){
+        return _size;
+    }
 }

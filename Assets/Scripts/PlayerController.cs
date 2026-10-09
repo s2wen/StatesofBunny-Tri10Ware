@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     private GameObject[] Blocks;
+    private GameObject[] Vents;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
+        Vents = GameObject.FindGameObjectsWithTag("Vents");
         playerState = GetComponent<PlayerAttributes>();
         Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
@@ -72,6 +74,16 @@ public class PlayerController : MonoBehaviour
             //smth to do with moving balloons here or whatever
 
             return true;
+        }
+
+        foreach(var v in Vents){
+            if(Vector2Int.RoundToInt(v.transform.position) == target){
+                if(playerState.getSize()==0.5f){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
         }
         foreach(var b in Blocks){
             if(Vector2Int.RoundToInt(b.transform.position) == target){

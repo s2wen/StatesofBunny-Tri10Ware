@@ -178,8 +178,8 @@ GameObject:
   - component: {fileID: 683024403}
   - component: {fileID: 683024406}
   m_Layer: 0
-  m_Name: Square (1)
-  m_TagString: Blocks
+  m_Name: Vent
+  m_TagString: Vents
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -307,7 +307,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.3490566, g: 0.24453112, b: 0.17946778, a: 1}
+  m_Color: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 1204993228}
   - component: {fileID: 1204993229}
   - component: {fileID: 1204993230}
+  - component: {fileID: 1204993231}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -537,7 +538,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -649,6 +650,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1204993231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204993223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d04fc4ea6a7f417fb0baa06f0fac715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributes
 --- !u!1 &2049881952
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +768,7 @@ GameObject:
   - component: {fileID: 2146060244}
   - component: {fileID: 2146060245}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Block
   m_TagString: Blocks
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -857,7 +870,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.4716981, g: 0.33491236, b: 0.15352438, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

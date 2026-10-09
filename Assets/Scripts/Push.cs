@@ -5,6 +5,7 @@ public class Push : MonoBehaviour
 {
 
     private GameObject[] Blocks;
+    private GameObject[] Vents;
     private float duration = 0.1f;
     private bool isMoving;
 
@@ -12,6 +13,7 @@ public class Push : MonoBehaviour
     void Start()
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
+        Vents = GameObject.FindGameObjectsWithTag("Vents");
     }
 
     // Update is called once per frame
@@ -36,6 +38,13 @@ public class Push : MonoBehaviour
 
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + (Vector3)direction;
+
+        foreach(var v in Vents){
+            if(endPos.x==v.transform.position.x && endPos.y==v.transform.position.y){
+                return false;
+            }
+        }
+
         foreach(var b in Blocks){
             if(endPos.x==b.transform.position.x && endPos.y==b.transform.position.y){
                 return false;

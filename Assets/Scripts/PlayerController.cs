@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class PlayerController : MonoBehaviour
         controls = new InputSystem_Actions();
     }
 
-    private void OnEnable(){
+    private void OnEnable()
+    {
         controls.Enable();
     }
 
-    private void OnDisable(){
+    private void OnDisable()
+    {
         controls.Disable();
     }
 
@@ -40,27 +43,37 @@ public class PlayerController : MonoBehaviour
     /**
         animated movement
     **/
-    private void Move(Vector2 direction){
+    private void Move(Vector2 direction)
+    {
         if (isMoving) return;
 
-        if(canMove(direction)){
+        if (canMove(direction))
+        {
             StartCoroutine(MoveRoutine(direction)); //transform.position += (Vector3)direction;
-        } else{
+        }
+        else
+        {
             StartCoroutine(FailMoveRoutine(direction));
         }
     }
 
-    
-    private bool canMove(Vector2 direction){
+
+    private bool canMove(Vector2 direction)
+    {
 
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
 
-        foreach(var b in Blocks){
-            if(Vector2Int.RoundToInt(b.transform.position) == target){
+        foreach (var b in Blocks)
+        {
+            if (Vector2Int.RoundToInt(b.transform.position) == target)
+            {
                 Push blockPush = b.GetComponent<Push>();
-                if(blockPush && blockPush.Move(direction)){
+                if (blockPush && blockPush.Move(direction))
+                {
                     return true;
-                }else{
+                }
+                else
+                {
                     return false;
                 }
             }
@@ -95,21 +108,36 @@ public class PlayerController : MonoBehaviour
         Vector3 endPos = startPos + ((Vector3)direction * 0.3f);
         float elapsedTime = 0f;
 
-        while (elapsedTime < duration*2/3)
+        while (elapsedTime < duration * 2 / 3)
         {
             elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / (duration/2));
+            transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / (duration / 2));
             yield return null;
         }
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(endPos, startPos, elapsedTime / (duration/2));
+            transform.position = Vector3.Lerp(endPos, startPos, elapsedTime / (duration / 2));
             yield return null;
         }
 
         transform.position = startPos;
         isMoving = false;
+    }
+
+    //Controls the trigger zones: ie, when entering a zone it triggers the effect
+    void OnTriggerEnter(BoxCollider2D other)
+    {
+        string zoneTag = other.tag;
+        States currentState = PlayerAttributes.
+
+        switch (zoneTag)
+        {
+            case "Cooler":
+                break;
+            case "Heater":
+                break;
+        }
     }
 }

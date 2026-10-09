@@ -9,10 +9,15 @@ public class PlayerController : MonoBehaviour
     private float duration = 0.1f;
     private bool isMoving;
 
+    private PlayerAttributes playerState;
+    private SpriteRenderer spriteRenderer;
+
 
     void Awake()
     {
         controls = new InputSystem_Actions();
+        
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable(){
@@ -26,9 +31,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
+        playerState = GetComponent<PlayerAttributes>();
+        Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
+        controls.Player.Interact.performed += ctx => ChangeState();
     }
 
+    private void ChangeState(){
+        playerState.setState((States)(((int)playerState.getState()+1)%3));
+        spriteRenderer.color = playerState.getColor();
+        Debug.Log("Current State:" + playerState.getState());
+    }
     /**
         snap-to-tile movement w/o animation
     **/
@@ -55,10 +68,15 @@ public class PlayerController : MonoBehaviour
 
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
 
+        if(playerState.getFlight()){
+            //smth to do with moving balloons here or whatever
+
+            return true;
+        }
         foreach(var b in Blocks){
             if(Vector2Int.RoundToInt(b.transform.position) == target){
                 Push blockPush = b.GetComponent<Push>();
-                if(blockPush && blockPush.Move(direction)){
+                if(playerState.getStrength()==1 && blockPush && blockPush.Move(direction)){
                     return true;
                 }else{
                     return false;

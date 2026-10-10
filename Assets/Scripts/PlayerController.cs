@@ -104,23 +104,19 @@ public class PlayerController : MonoBehaviour
         {
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
-                foreach (var b in Blocks)
+                Push blockPush = b.GetComponent<Push>();
+                if (playerState.getStrength() == 1 && blockPush && blockPush.Move(direction))
                 {
-                    if (Vector2Int.RoundToInt(b.transform.position) == target)
-                    {
-                        Push blockPush = b.GetComponent<Push>();
-                        if (playerState.getStrength() == 1 && blockPush && blockPush.Move(direction))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
+                    return true;
                 }
-                return true; //TODO: check player state and which tile is being moved into
+                else
+                {
+                    return false;
+                }
             }
+        }
+        return true; //TODO: check player state and which tile is being moved into
+    }
 
     private IEnumerator MoveRoutine(Vector2 direction)
     {
@@ -168,17 +164,34 @@ public class PlayerController : MonoBehaviour
     }
 
     //Controls the trigger zones: ie, when entering a zone it triggers the effect
-    void OnTriggerEnter(BoxCollider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         string zoneTag = other.tag;
-        States currentState = PlayerAttributes.
+        States currentState = playerState.getState();
 
         switch (zoneTag)
         {
             case "Cooler":
+                if (currentState == States.Gas)
+                {
+                    playerState.setState(States.Liquid);
+                }
+                else if (currentState == States.Liquid)
+                {
+                    playerState.setState(States.Solid);
+                }
                 break;
             case "Heater":
+                if (currentState == States.Liquid)
+                {
+                    playerState.setState(States.Gas);
+                }
+                else if (currentState == States.Solid)
+                {
+                    playerState.setState(States.Liquid);
+                }
                 break;
         }
+        Debug.Log($"Changed state to {playerState.getState()}");
     }
 }

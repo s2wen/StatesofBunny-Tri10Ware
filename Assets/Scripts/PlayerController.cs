@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Exit exit;
     private GameObject[] Blocks;
     private GameObject[] Vents;
 
@@ -86,20 +87,20 @@ public class PlayerController : MonoBehaviour
             return true;
         }
 
-        foreach (var v in Vents)
-        {
-            if (Vector2Int.RoundToInt(v.transform.position) == target)
-            {
-                if (playerState.getSize() == 0.5f)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        // foreach (var v in Vents)
+        // {
+        //     if (Vector2Int.RoundToInt(v.transform.position) == target)
+        //     {
+        //         if (playerState.getSize() == 0.5f)
+        //         {
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             return false;
+        //         }
+        //     }
+        // }
         foreach (var b in Blocks)
         {
             if (Vector2Int.RoundToInt(b.transform.position) == target)
@@ -135,6 +136,8 @@ public class PlayerController : MonoBehaviour
 
         transform.position = endPos;
         isMoving = false;
+
+        exit.ReachExit();
     }
 
     private IEnumerator FailMoveRoutine(Vector2 direction)

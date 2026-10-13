@@ -86,20 +86,20 @@ public class PlayerController : MonoBehaviour
             return true;
         }
 
-        foreach (var v in Vents)
-        {
-            if (Vector2Int.RoundToInt(v.transform.position) == target)
-            {
-                if (playerState.getSize() == 0.5f)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        // foreach (var v in Vents)
+        // {
+        //     if (Vector2Int.RoundToInt(v.transform.position) == target)
+        //     {
+        //         if (playerState.getSize() == 0.5f)
+        //         {
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             return false;
+        //         }
+        //     }
+        // }
         foreach (var b in Blocks)
         {
             if (Vector2Int.RoundToInt(b.transform.position) == target)

@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Exit exit;
     private GameObject[] Blocks;
     private GameObject[] Vents;
 
@@ -135,6 +136,8 @@ public class PlayerController : MonoBehaviour
 
         transform.position = endPos;
         isMoving = false;
+
+        exit.ReachExit();
     }
 
     private IEnumerator FailMoveRoutine(Vector2 direction)

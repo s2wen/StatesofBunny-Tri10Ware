@@ -1,11 +1,12 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.Events;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
     private GameObject[] Blocks;
     private GameObject[] Vents;
+    private GameObject[] AirFlows;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private PlayerAttributes playerState;
     private SpriteRenderer spriteRenderer;
 
+    [SerializeField]
+    private Tilemap groundTilemap;
 
     void Awake()
     {
@@ -36,6 +39,8 @@ public class PlayerController : MonoBehaviour
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Vents = GameObject.FindGameObjectsWithTag("Vents");
+        AirFlows = GameObject.FindGameObjectsWithTag("AirFlows");
+        Debug.Log($"AirFlows is {AirFlows.Length}");
         playerState = GetComponent<PlayerAttributes>();
         Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
@@ -48,6 +53,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = playerState.getColor();
         Debug.Log("Current State:" + playerState.getState());
     }
+
     /**
         snap-to-tile movement w/o animation
     **/
@@ -61,7 +67,8 @@ public class PlayerController : MonoBehaviour
     **/
     private void Move(Vector2 direction)
     {
-        if (isMoving) return;
+        if (isMoving)
+            return;
 
         if (canMove(direction))
         {
@@ -73,10 +80,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private bool canMove(Vector2 direction)
     {
-
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
 
         if (playerState.getFlight())
@@ -115,6 +120,22 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        // airflow check
+        foreach (var a in AirFlows)
+        {
+            if (Vector2Int.RoundToInt(a.transform.position) == target && playerState.getFlight())
+                return false;
+        }
+
+        // void check
+        Vector3Int groundPos = groundTilemap.WorldToCell((Vector3Int)target);
+        if (!groundTilemap.HasTile(groundPos) && !playerState.getFlight())
+        {
+            Debug.Log("Can't walk over void");
+            return false;
+        }
+
         return true; //TODO: check player state and which tile is being moved into
     }
 

@@ -84,12 +84,14 @@ public class PlayerController : MonoBehaviour
     {
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
 
+        /*
         if (playerState.getFlight())
         {
             //smth to do with moving balloons here or whatever
 
             return true;
         }
+        */
 
         foreach (var v in Vents)
         {
@@ -110,7 +112,11 @@ public class PlayerController : MonoBehaviour
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
-                if (playerState.getStrength() == 1 && blockPush && blockPush.Move(direction))
+                if (
+                    playerState.getState() == States.Solid
+                    && blockPush
+                    && blockPush.Move(direction)
+                )
                 {
                     return true;
                 }
@@ -124,13 +130,16 @@ public class PlayerController : MonoBehaviour
         // airflow check
         foreach (var a in AirFlows)
         {
-            if (Vector2Int.RoundToInt(a.transform.position) == target && playerState.getFlight())
+            if (
+                Vector2Int.RoundToInt(a.transform.position) == target
+                && playerState.getState() == States.Gas
+            )
                 return false;
         }
 
         // void check
         Vector3Int targetTile = tilemap.WorldToCell((Vector3Int)target);
-        if (!tilemap.HasTile(targetTile) && !playerState.getFlight())
+        if (!tilemap.HasTile(targetTile) && playerState.getState() != States.Gas)
         {
             Debug.Log("Can't walk over void");
             return false;

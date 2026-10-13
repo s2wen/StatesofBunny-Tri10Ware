@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [SerializeField]
-    private Tilemap groundTilemap;
+    private Tilemap tilemap;
 
     void Awake()
     {
@@ -129,8 +129,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // void check
-        Vector3Int groundPos = groundTilemap.WorldToCell((Vector3Int)target);
-        if (!groundTilemap.HasTile(groundPos) && !playerState.getFlight())
+        Vector3Int targetTile = tilemap.WorldToCell((Vector3Int)target);
+        if (!tilemap.HasTile(targetTile) && !playerState.getFlight())
         {
             Debug.Log("Can't walk over void");
             return false;

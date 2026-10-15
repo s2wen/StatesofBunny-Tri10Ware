@@ -4,10 +4,11 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Exit exit;
+    [SerializeField]
+    private Exit exit;
     private GameObject[] Blocks;
     private GameObject[] Vents;
-    private GameObject[] AirFlows;
+    private GameObject[] Airflows;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -40,8 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Vents = GameObject.FindGameObjectsWithTag("Vents");
-        AirFlows = GameObject.FindGameObjectsWithTag("AirFlows");
-        Debug.Log($"AirFlows is {AirFlows.Length}");
+        Airflows = GameObject.FindGameObjectsWithTag("Airflows");
+        Debug.Log($"AirFlows is {Airflows.Length}");
         playerState = GetComponent<PlayerAttributes>();
         Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // airflow check
-        foreach (var a in AirFlows)
+        foreach (var a in Airflows)
         {
             if (
                 Vector2Int.RoundToInt(a.transform.position) == target

@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     private PlayerAttributes playerState;
     private SpriteRenderer spriteRenderer;
 
+    private Drain destination;
+
 
     void Awake()
     {
@@ -191,7 +193,28 @@ public class PlayerController : MonoBehaviour
                     playerState.setState(States.Liquid);
                 }
                 break;
+            case "Drain":
+                if (currentState == States.Liquid && other.TryGetComponent(out Drain drain))
+                {
+                    if (drain == destination)
+                    {
+                        break;
+                    }
+                    destination = drain.moveNext();
+                    StopAllCoroutines();
+                    isMoving = false;
+                    transform.position = new Vector3(destination.getPos().x, destination.getPos().y, transform.position.z);
+                }
+                break;
         }
         Debug.Log($"Changed state to {playerState.getState()}");
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out Drain drain) && drain == destination)
+        {
+            destination = null;
+        }
     }
 }

@@ -9,15 +9,11 @@ public enum States
 
 public class PlayerAttributes : MonoBehaviour
 {
-    private int _health;
-
     private States _state = States.Solid;
 
     // attributes related to state
-    private int _strength = 1;
     private float _speed = 1;
     private float _size = 1;
-    private bool _flight;
 
     //temp variable to see state change
     private Color _targetColor = Color.red;
@@ -34,10 +30,8 @@ public class PlayerAttributes : MonoBehaviour
         if (_state == States.Solid)
         {
             // update attributes, currently arbitrary values
-            _strength = 1;
             _speed = 1;
             _size = 1;
-            _flight = false;
             _targetColor = Color.red;
         }
         else if (_state == States.Liquid)
@@ -46,40 +40,31 @@ public class PlayerAttributes : MonoBehaviour
             // and speed as a scalar for the unit vector
 
             // update attributes, currently arbitrary values
-            _strength = 0;
             _speed = 1.5f;
             _size = 0.5f;
-            _flight = false;
             _targetColor = Color.blue;
         }
         else if (_state == States.Gas)
         {
             // update attributes, currently arbitrary values
-            _strength = 0;
             _speed = 1;
             _size = 1;
-            _flight = true;
             _targetColor = Color.yellow;
         }
     }
 
-    public States getState(){
+    public States getState()
+    {
         return _state;
     }
 
-    public Color getColor(){
+    public Color getColor()
+    {
         return _targetColor;
     }
 
-    public int getStrength(){
-        return _strength;
-    }
-
-    public bool getFlight(){
-        return _flight;
-    }
-
-    public float getSize(){
+    public float getSize()
+    {
         return _size;
     }
 }

@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Push : MonoBehaviour
 {
-
+    public static event System.Action BlockSettled;
+    
     private GameObject[] Blocks;
     private GameObject[] Vents;
     private float duration = 0.1f;
@@ -71,5 +72,7 @@ public class Push : MonoBehaviour
 
         transform.position = endPos;
         isMoving = false;
+
+        BlockSettled?.Invoke();
     }
 }

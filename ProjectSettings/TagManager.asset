@@ -9,6 +9,7 @@ TagManager:
   - Cooler
   - Heater
   - Drain
+  - Airflows
   layers:
   - Default
   - TransparentFX

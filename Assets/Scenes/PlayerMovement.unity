@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 850851967}
   m_Layer: 0
   m_Name: Block (1)
-  m_TagString: AirFlows
+  m_TagString: Airflows
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1023,7 +1023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   exit: {fileID: 929790288}
-  tilemap: {fileID: 0}
+  tilemap: {fileID: 1035394395}
 --- !u!61 &1204993229
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1553,3 +1553,5 @@ SceneRoots:
   - {fileID: 2759098177053168213}
   - {fileID: 929790290}
   - {fileID: 1636615484}
+  - {fileID: 342985110}
+  - {fileID: 137147640}

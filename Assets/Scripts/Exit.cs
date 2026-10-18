@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Exit : MonoBehaviour
 {
+    [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Color closedColor = Color.gray;
     [SerializeField] private Color openColor = Color.white;
@@ -32,7 +33,7 @@ public class Exit : MonoBehaviour
         Vector2Int curPos = Vector2Int.RoundToInt(transform.position);
         
         if (Vector2Int.RoundToInt(player.transform.position) == curPos)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+            levelLoader.LoadNextLevel();
         
         
     }

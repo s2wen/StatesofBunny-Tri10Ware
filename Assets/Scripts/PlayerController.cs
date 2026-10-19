@@ -114,6 +114,7 @@ public class PlayerController : MonoBehaviour
         // }
         foreach (var b in Blocks)
         {
+            if(playerState.getState() == States.Gas) break;
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();

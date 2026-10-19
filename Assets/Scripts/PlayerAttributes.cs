@@ -12,7 +12,6 @@ public class PlayerAttributes : MonoBehaviour
     private States _state = States.Solid;
 
     // attributes related to state
-    private float _speed = 1;
     private float _size = 1;
 
     //temp variable to see state change
@@ -30,24 +29,20 @@ public class PlayerAttributes : MonoBehaviour
         if (_state == States.Solid)
         {
             // update attributes, currently arbitrary values
-            _speed = 1;
             _size = 1;
             _targetColor = Color.red;
         }
         else if (_state == States.Liquid)
         {
             // just thinking of using size as a scalar for shrinking the sprite
-            // and speed as a scalar for the unit vector
 
             // update attributes, currently arbitrary values
-            _speed = 1.5f;
             _size = 0.5f;
             _targetColor = Color.blue;
         }
         else if (_state == States.Gas)
         {
             // update attributes, currently arbitrary values
-            _speed = 1;
             _size = 1;
             _targetColor = Color.yellow;
         }

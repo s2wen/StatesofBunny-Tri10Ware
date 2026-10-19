@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Tilemap tilemap;
 
+    public Tilemap FloorTilemap => tilemap;
+
     private Drain destination;
 
 
@@ -72,6 +74,12 @@ public class PlayerController : MonoBehaviour
     **/
     private void Move(Vector2 direction)
     {
+        if (direction.sqrMagnitude < 0.01f) return;
+        // Only the new board enforces cardinal steps. Preserve the original
+        // PlayerMovement scene's diagonal and analog input behavior.
+        if (tilemap.GetComponent<LevelBoard>())
+            direction = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
+                ? new Vector2(Mathf.Sign(direction.x), 0) : new Vector2(0, Mathf.Sign(direction.y));
         if (isMoving)
             return;
 
@@ -88,6 +96,9 @@ public class PlayerController : MonoBehaviour
     private bool canMove(Vector2 direction)
     {
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
+        if (SolidWall.IsAt(target)) return false;
+        // Match PlayerMovement: missing floor blocks solid/liquid below,
+        // while gas can cross empty space without an additional board/wall gate.
 
         /*
         if (playerState.getFlight())
@@ -117,6 +128,7 @@ public class PlayerController : MonoBehaviour
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
+                if (blockPush && blockPush.IsBridge) continue;
                 if (
                     playerState.getState() == States.Solid
                     && blockPush
@@ -144,7 +156,8 @@ public class PlayerController : MonoBehaviour
 
         // void check
         Vector3Int targetTile = tilemap.WorldToCell((Vector3Int)target);
-        if (!tilemap.HasTile(targetTile) && playerState.getState() != States.Gas)
+        if ((!tilemap.HasTile(targetTile) || Hole.IsHoleAt(target)) && !Push.HasBridgeAt(target, Blocks)
+            && playerState.getState() != States.Gas)
         {
             Debug.Log("Can't walk over void");
             return false;
@@ -242,6 +255,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
+        spriteRenderer.color = playerState.getColor();
         Debug.Log($"Changed state to {playerState.getState()}");
     }
 

@@ -7,12 +7,13 @@ public class Exit : MonoBehaviour
     [SerializeField] private Color closedColor = Color.gray;
     [SerializeField] private Color openColor = Color.white;
 
+    [SerializeField] private string nextScene;
     private PlayerController player;
     
     public bool IsOpen { get; private set; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start(){
+    void Awake(){
         player = FindObjectsByType<PlayerController>()[0];
         SetOpen(false);
     }
@@ -32,7 +33,10 @@ public class Exit : MonoBehaviour
         Vector2Int curPos = Vector2Int.RoundToInt(transform.position);
         
         if (Vector2Int.RoundToInt(player.transform.position) == curPos)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        {
+            if (!string.IsNullOrEmpty(nextScene)) SceneManager.LoadScene(nextScene);
+            else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        }
         
         
     }

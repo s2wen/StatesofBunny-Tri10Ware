@@ -11,9 +11,10 @@ public class PuzzleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        targets = FindObjectsByType<BlockTarget>(FindObjectsSortMode.None);
+        targets = FindObjectsByType<BlockTarget>();
         blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Push.BlockSettled += Check;
+        Check();
     }
 
     void OnDestroy() => Push.BlockSettled -= Check;

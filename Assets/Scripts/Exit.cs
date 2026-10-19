@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Exit : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class Exit : MonoBehaviour
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Color closedColor = Color.gray;
     [SerializeField] private Color openColor = Color.white;
+    [SerializeField] private AudioClip portalSound;
 
     private PlayerController player;
     
@@ -33,7 +35,16 @@ public class Exit : MonoBehaviour
         Vector2Int curPos = Vector2Int.RoundToInt(transform.position);
         
         if (Vector2Int.RoundToInt(player.transform.position) == curPos)
-            levelLoader.LoadNextLevel();
+        {
+            StartCoroutine(WaitForSoundAndLoadScene());
+        }
+    }
+
+    private IEnumerator WaitForSoundAndLoadScene()
+    {
+        AudioSource.PlayClipAtPoint(portalSound, transform.position);
+        yield return new WaitForSeconds(portalSound.length);
+        levelLoader.LoadNextLevel();
         
         
     }

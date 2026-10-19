@@ -43,10 +43,9 @@ public class Exit : MonoBehaviour
     private IEnumerator WaitForSoundAndLoadScene()
     {
         AudioSource.PlayClipAtPoint(portalSound, transform.position);
+        player.movementLockedUntil = Time.time + portalSound.length;
         yield return new WaitForSeconds(portalSound.length);
         levelLoader.LoadNextLevel();
-        
-        
     }
 
 }

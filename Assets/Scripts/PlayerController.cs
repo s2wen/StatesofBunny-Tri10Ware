@@ -4,10 +4,11 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Exit exit;
+    [SerializeField]
+    private Exit exit;
     private GameObject[] Blocks;
     private GameObject[] Vents;
-    private GameObject[] AirFlows;
+    private GameObject[] Airflows;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private Tilemap tilemap;
+
+    private Drain destination;
+
 
     void Awake()
     {
@@ -40,8 +44,8 @@ public class PlayerController : MonoBehaviour
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Vents = GameObject.FindGameObjectsWithTag("Vents");
-        AirFlows = GameObject.FindGameObjectsWithTag("AirFlows");
-        Debug.Log($"AirFlows is {AirFlows.Length}");
+        Airflows = GameObject.FindGameObjectsWithTag("Airflows");
+        Debug.Log($"AirFlows is {Airflows.Length}");
         playerState = GetComponent<PlayerAttributes>();
         Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
@@ -110,6 +114,7 @@ public class PlayerController : MonoBehaviour
         // }
         foreach (var b in Blocks)
         {
+            if(playerState.getState() == States.Gas) break;
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
@@ -129,7 +134,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // airflow check
-        foreach (var a in AirFlows)
+        foreach (var a in Airflows)
         {
             if (
                 Vector2Int.RoundToInt(a.transform.position) == target
@@ -224,7 +229,28 @@ public class PlayerController : MonoBehaviour
                     playerState.setState(States.Liquid);
                 }
                 break;
+            case "Drain":
+                if (currentState == States.Liquid && other.TryGetComponent(out Drain drain))
+                {
+                    if (drain == destination)
+                    {
+                        break;
+                    }
+                    destination = drain.moveNext();
+                    StopAllCoroutines();
+                    isMoving = false;
+                    transform.position = new Vector3(destination.getPos().x, destination.getPos().y, transform.position.z);
+                }
+                break;
         }
         Debug.Log($"Changed state to {playerState.getState()}");
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out Drain drain) && drain == destination)
+        {
+            destination = null;
+        }
     }
 }

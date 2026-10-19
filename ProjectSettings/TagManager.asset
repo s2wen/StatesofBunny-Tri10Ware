@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Blocks
   - Vents
+  - Cooler
+  - Heater
+  - Drain
+  - Airflows
   layers:
   - Default
   - TransparentFX

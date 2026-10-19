@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Exit : MonoBehaviour
 {
+    [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Color closedColor = Color.gray;
     [SerializeField] private Color openColor = Color.white;
@@ -43,7 +44,9 @@ public class Exit : MonoBehaviour
     {
         AudioSource.PlayClipAtPoint(portalSound, transform.position);
         yield return new WaitForSeconds(portalSound.length);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        levelLoader.LoadNextLevel();
+        
+        
     }
 
 }

@@ -1,0 +1,533 @@
+fileFormatVersion: 2
+guid: b39baa870292f490f968a403dd4de1e7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4303649038685756824
+    second: side gasbunny_0
+  - first:
+      213: -6977727286996953695
+    second: side gasbunny_1
+  - first:
+      213: 4941513845751009977
+    second: side gasbunny_2
+  - first:
+      213: 7038746097091631669
+    second: side gasbunny_3
+  - first:
+      213: 7581426015955387537
+    second: side gasbunny_4
+  - first:
+      213: -5971965892659939560
+    second: side gasbunny_5
+  - first:
+      213: -1206121075774020315
+    second: side gasbunny_6
+  - first:
+      213: 3488762156686946208
+    second: side gasbunny_7
+  - first:
+      213: 5599742053003728029
+    second: side gasbunny_8
+  - first:
+      213: -7836643168803146483
+    second: side gasbunny_9
+  - first:
+      213: 635047048170593354
+    second: side gasbunny_10
+  - first:
+      213: 5416867304078317420
+    second: side gasbunny_11
+  - first:
+      213: -5862541963344026659
+    second: side gasbunny_12
+  - first:
+      213: 3817614532972363045
+    second: side gasbunny_13
+  - first:
+      213: -37382618187451394
+    second: side gasbunny_14
+  - first:
+      213: -7437135028469058705
+    second: side gasbunny_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: side gasbunny_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 321
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8622f23400e5644c0800000000000000
+      internalID: -4303649038685756824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 230
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a51ff680022a2f90800000000000000
+      internalID: -6977727286996953695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_2
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 321
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b2d9a459a8c39440800000000000000
+      internalID: 4941513845751009977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_3
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 230
+        width: 93
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53a505d4846aea160800000000000000
+      internalID: 7038746097091631669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_4
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 293
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1940deb1bc2a63960800000000000000
+      internalID: 7581426015955387537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_5
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 300
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 817714559a05f1da0800000000000000
+      internalID: -5971965892659939560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_6
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 279
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 525a06a954ff24fe0800000000000000
+      internalID: -1206121075774020315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 258
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0afa62f72b29a6030800000000000000
+      internalID: 3488762156686946208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_8
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 251
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d949a1f7ab746bd40800000000000000
+      internalID: 5599742053003728029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 244
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d053ffbee86ae3390800000000000000
+      internalID: -7836643168803146483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_10
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 216
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4c5ed9fce320d800800000000000000
+      internalID: 635047048170593354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_11
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 118
+        width: 107
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c67140ffc149c2b40800000000000000
+      internalID: 5416867304078317420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_12
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 118
+        width: 106
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd3ee0a352114aea0800000000000000
+      internalID: -5862541963344026659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_13
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 209
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52dbf2fe034eaf430800000000000000
+      internalID: 3817614532972363045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_14
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 216
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef3b922f4b03b7ff0800000000000000
+      internalID: -37382618187451394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: side gasbunny_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 113
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f63bc71681df9c890800000000000000
+      internalID: -7437135028469058705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      side gasbunny_0: -4303649038685756824
+      side gasbunny_1: -6977727286996953695
+      side gasbunny_10: 635047048170593354
+      side gasbunny_11: 5416867304078317420
+      side gasbunny_12: -5862541963344026659
+      side gasbunny_13: 3817614532972363045
+      side gasbunny_14: -37382618187451394
+      side gasbunny_15: -7437135028469058705
+      side gasbunny_2: 4941513845751009977
+      side gasbunny_3: 7038746097091631669
+      side gasbunny_4: 7581426015955387537
+      side gasbunny_5: -5971965892659939560
+      side gasbunny_6: -1206121075774020315
+      side gasbunny_7: 3488762156686946208
+      side gasbunny_8: 5599742053003728029
+      side gasbunny_9: -7836643168803146483
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

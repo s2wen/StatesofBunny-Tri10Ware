@@ -744,6 +744,7 @@ MonoBehaviour:
   sprite: {fileID: 929790289}
   closedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   openColor: {r: 1, g: 1, b: 1, a: 1}
+  portalSound: {fileID: 8300000, guid: 10139ca8f2ebd2945b71a8dd4653e52e, type: 3}
 --- !u!212 &929790289
 SpriteRenderer:
   serializedVersion: 2
@@ -2116,6 +2117,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   exit: {fileID: 929790288}
+  solidMove: {fileID: 8300000, guid: 5951261ce577abe49b7d2bc780d01d2b, type: 3}
+  liquidMove: {fileID: 8300000, guid: 0d85960687966454f9aec66a761def95, type: 3}
+  gasMove: {fileID: 8300000, guid: e1360b6d108b8904b97be6bfe624c82d, type: 3}
+  blockMove: {fileID: 8300000, guid: 4b1b5b49e2c3bbd4c9badc2d14f20f0e, type: 3}
+  freezing: {fileID: 8300000, guid: 6b10f05280c526a4cbf6c8f2ee3fdf92, type: 3}
+  melting: {fileID: 8300000, guid: a0a7fce7959ac3e4198dd30fe9303ee8, type: 3}
+  boiling: {fileID: 8300000, guid: 9e9a116a2feeeec458b6341a5064e826, type: 3}
+  condensing: {fileID: 8300000, guid: 38dab8c28a5943f448aeed04bffb52b2, type: 3}
+  movementLockedUntil: 0
   tilemap: {fileID: 1035394395}
 --- !u!61 &1204993229
 BoxCollider2D:

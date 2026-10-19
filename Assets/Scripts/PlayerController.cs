@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private GameObject[] Blocks;
     private GameObject[] Vents;
     private GameObject[] Airflows;
+    private BlockTarget[] targets;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
+        targets = FindObjectsByType<BlockTarget>();
         Vents = GameObject.FindGameObjectsWithTag("Vents");
         Airflows = GameObject.FindGameObjectsWithTag("Airflows");
         Debug.Log($"AirFlows is {Airflows.Length}");
@@ -143,6 +145,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        // Only the gag scene enables movable targets. Any form can push these markers.
+        foreach (var marker in targets)
+            if (marker && marker.Movable && Vector2Int.RoundToInt(marker.transform.position) == target)
+                return marker.Move(direction, tilemap, Blocks);
 
         // airflow check
         foreach (var a in Airflows)

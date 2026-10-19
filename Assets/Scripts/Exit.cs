@@ -8,6 +8,7 @@ public class Exit : MonoBehaviour
     [SerializeField] private Color openColor = Color.white;
 
     [SerializeField] private string nextScene;
+    public bool IsCompleted { get; private set; }
     private PlayerController player;
     
     public bool IsOpen { get; private set; }
@@ -29,11 +30,17 @@ public class Exit : MonoBehaviour
 
     public void ReachExit()
     {
-        if(!IsOpen) return;
+        if(!IsOpen || IsCompleted) return;
         Vector2Int curPos = Vector2Int.RoundToInt(transform.position);
         
         if (Vector2Int.RoundToInt(player.transform.position) == curPos)
         {
+            if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 1)
+            {
+                IsCompleted = true;
+                Debug.Log("All levels completed!");
+                return;
+            }
             if (!string.IsNullOrEmpty(nextScene)) SceneManager.LoadScene(nextScene);
             else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         }

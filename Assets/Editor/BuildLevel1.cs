@@ -29,7 +29,9 @@ public static class BuildLevel1
     }
     public static void Capture()
     {
-        EditorSceneManager.OpenScene("Assets/Scenes/Level1.unity");
+        foreach (string level in new[]{"1","2","2.5","3"})
+        {
+        EditorSceneManager.OpenScene($"Assets/Scenes/Level{level}.unity");
         var camera = Camera.main;
         var target = new RenderTexture(1000,1000,24);
         var request = new UniversalRenderPipeline.SingleCameraRequest { destination = target };
@@ -37,17 +39,76 @@ public static class BuildLevel1
         RenderTexture.active=target;
         var image=new Texture2D(1000,1000,TextureFormat.RGB24,false);
         image.ReadPixels(new Rect(0,0,1000,1000),0,0);image.Apply();
-        System.IO.File.WriteAllBytes("/tmp/Level1-preview.png",image.EncodeToPNG());
+        System.IO.File.WriteAllBytes($"/tmp/Level{level}-preview.png",image.EncodeToPNG());
         RenderTexture.active=null;Object.DestroyImmediate(image);target.Release();Object.DestroyImmediate(target);
-        Debug.Log("LEVEL1_PREVIEW_CAPTURED");
+        Debug.Log($"LEVEL{level}_PREVIEW_CAPTURED");
+        }
     }
-    [MenuItem("Tools/Levels/Build Level1 From Plan")]
+    [MenuItem("Tools/Levels/Rebuild Starter and Gag Levels")]
     public static void Build()
     {
+        // Rebuild the starter and gag levels; never overwrite the user's Level3.
         EditorSceneManager.OpenScene("Assets/Scenes/PlayerMovement.unity");
         var original = Object.FindAnyObjectByType<PlayerController>();
         square = original.GetComponent<SpriteRenderer>().sprite;
         material = original.GetComponent<SpriteRenderer>().sharedMaterial;
+        BuildStarter(1);
+        BuildStarter(2);
+        BuildGag();
+        EditorBuildSettings.scenes = new[] {
+            new EditorBuildSettingsScene("Assets/Scenes/Level1.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level2.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level2.5.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level3.unity",true)
+        };
+        AssetDatabase.SaveAssets();
+        Debug.Log("PROGRESSION_BUILD_OK");
+    }
+    // Clone Level2 so the gag keeps its existing art and components.
+    public static void BuildGag()
+    {
+        var scene=EditorSceneManager.OpenScene("Assets/Scenes/Level2.unity");
+        var player=Object.FindAnyObjectByType<PlayerController>();
+        var map=player.FloorTilemap;
+        map.ClearAllTiles();
+        var tile=AssetDatabase.LoadAssetAtPath<Tile>("Assets/Art/Level1Floor.asset");
+        void Cell(int x,int row)=>map.SetTile(new Vector3Int(x,-row,0),tile);
+        void Room(int x0,int x1,int r0,int r1) { for(int x=x0;x<=x1;x++)for(int r=r0;r<=r1;r++)Cell(x,r); }
+        Room(1,5,1,5);Room(8,12,1,5);Room(8,12,11,13);Room(1,5,10,12);
+        Cell(5,6);Cell(9,6);Room(4,9,7,7);Cell(7,5);Cell(7,6);Room(4,7,8,8);Cell(9,8);
+        Cell(4,8);Cell(4,9);Room(10,10,6,8);
+        foreach(var cooler in GameObject.FindGameObjectsWithTag("Cooler"))Object.DestroyImmediate(cooler);
+        Prefab("Assets/Prefabs/Cooler.prefab","Cooler",1,-12);
+        foreach(var position in new[]{new Vector2Int(3,-11),new Vector2Int(4,-11)}) {
+            var bridge=Prefab("Assets/Prefabs/BridgeBlock.prefab","Bridge Block",position.x,position.y);
+            Reference(bridge.GetComponent<Push>(),"tilemap",map);
+            var sprite=bridge.GetComponent<SpriteRenderer>();sprite.color=new Color(1f,.85f,.15f);sprite.sortingOrder=1;
+        }
+        foreach(int row in new[]{8,9}) {
+            var hole=Prefab("Assets/Prefabs/Hole.prefab","Hole",4,-row);
+            hole.GetComponent<SpriteRenderer>().color=Color.white;
+        }
+        foreach(var target in Object.FindObjectsByType<BlockTarget>()) {
+            var settings=new SerializedObject(target);settings.FindProperty("movable").boolValue=true;settings.ApplyModifiedPropertiesWithoutUndo();
+            target.name="Movable Objective Target";
+        }
+        var exit=Object.FindAnyObjectByType<Exit>();
+        var exitSettings=new SerializedObject(exit);exitSettings.FindProperty("nextScene").stringValue="Level3";exitSettings.ApplyModifiedPropertiesWithoutUndo();
+        EditorSceneManager.SaveScene(scene,"Assets/Scenes/Level2.5.unity");
+        scene=EditorSceneManager.OpenScene("Assets/Scenes/Level2.unity");
+        exitSettings=new SerializedObject(Object.FindAnyObjectByType<Exit>());exitSettings.FindProperty("nextScene").stringValue="Level2.5";exitSettings.ApplyModifiedPropertiesWithoutUndo();
+        EditorSceneManager.SaveScene(scene);
+        EditorBuildSettings.scenes=new[] {
+            new EditorBuildSettingsScene("Assets/Scenes/Level1.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level2.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level2.5.unity",true),
+            new EditorBuildSettingsScene("Assets/Scenes/Level3.unity",true)
+        };
+        AssetDatabase.SaveAssets();
+        Debug.Log("LEVEL2_5_BUILD_PASSED");
+    }
+    static void BuildStarter(int level)
+    {
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         var grid = new GameObject("Grid", typeof(Grid));
         var ground = new GameObject("Floor", typeof(Tilemap), typeof(TilemapRenderer), typeof(LevelBoard));
@@ -56,71 +117,54 @@ public static class BuildLevel1
         ground.GetComponent<LevelBoard>().floor = floor;
         ground.GetComponent<TilemapRenderer>().sortingOrder = -2;
         ground.GetComponent<TilemapRenderer>().sharedMaterial = material;
-        const string tilePath = "Assets/Art/Level1Floor.asset";
-        var tile = AssetDatabase.LoadAssetAtPath<Tile>(tilePath);
-        if (!tile) { tile = ScriptableObject.CreateInstance<Tile>(); AssetDatabase.CreateAsset(tile, tilePath); }
-        var originalTile = AssetDatabase.LoadAssetAtPath<Tile>("Assets/Art/ground.asset");
-        tile.sprite = originalTile.sprite; tile.color = originalTile.color; tile.colliderType = Tile.ColliderType.None;
-        tile.transform = originalTile.transform; EditorUtility.SetDirty(tile);
-        for (int x=0;x<15;x++) for (int y=0;y<15;y++)
-            if ((x>=5 && x<=9) || (y>=5 && y<=9)) floor.SetTile(new Vector3Int(x,y,0),tile);
-
+        var tile = AssetDatabase.LoadAssetAtPath<Tile>("Assets/Art/Level1Floor.asset");
+        // Coordinates use rows downwards, matching the approved drawings.
+        void Floor(int x,int row) => floor.SetTile(new Vector3Int(x,-row,0),tile);
+        void Room(int x0,int x1,int r0,int r1) {
+            for(int x=x0;x<=x1;x++) for(int r=r0;r<=r1;r++) Floor(x,r);
+        }
+        GameObject Place(string asset,string name,int x,int row) => Prefab("Assets/Prefabs/"+asset+".prefab",name,x,-row);
+        Room(1,5,1,5); Room(8,12,1,5);
+        int goalRow = level==1 ? 9 : 12;
+        Room(8,12,goalRow-1,goalRow+1);
+        for(int x=7;x<=13;x++) for(int r=goalRow-2;r<=goalRow+2;r++)
+            if(x==7 || x==13 || r==goalRow-2 || r==goalRow+2)
+                Place("SolidWall","Goal Room Wall",x,r);
+        if(level==2) {
+            Floor(5,6); Floor(9,6);
+            for(int x=5;x<=9;x++) Floor(x,7);
+            Floor(4,7); Floor(9,8); Floor(7,5); Floor(7,6); Floor(7,8);
+            Room(3,5,7,9); Floor(3,10); Floor(8,8);
+            Place("Heater","Heater",3,2);
+            Place("Cooler","Cooler",3,10);
+        }
         var light = new GameObject("Global Light 2D").AddComponent<Light2D>();
         light.lightType = Light2D.LightType.Global; light.intensity = 1;
         var cameraGO = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener)); cameraGO.tag="MainCamera";
-        cameraGO.transform.position = new Vector3(7,7,-10);
-        var camera = cameraGO.GetComponent<Camera>(); camera.orthographic=true; camera.orthographicSize=8.6f;
+        cameraGO.transform.position = new Vector3(7,level==1 ? -6 : -7.5f,-10);
+        var camera = cameraGO.GetComponent<Camera>(); camera.orthographic=true; camera.orthographicSize=level==1 ? 7 : 8;
         camera.clearFlags=CameraClearFlags.SolidColor; camera.backgroundColor=new Color(.12f,.10f,.18f);
-
-        var player = Visual("Player",7,7,Color.red,2); player.tag="Player";
+        var player = Visual("Player",2,level==1 ? -5 : -4,Color.red,2); player.tag="Player";
         player.AddComponent<PlayerAttributes>();
         var controller = player.AddComponent<PlayerController>(); Reference(controller,"tilemap",floor);
         player.AddComponent<BoxCollider2D>().size = new Vector2(.65f,.65f);
         var body=player.AddComponent<Rigidbody2D>(); body.gravityScale=0; body.constraints=RigidbodyConstraints2D.FreezeRotation;
-
-        var goal = Visual("Goal - opens when all three targets are covered",7,2,Color.gray);
+        var goal = Visual("Goal",level==1 ? 11 : 10,-goalRow,Color.gray);
         var exit = goal.AddComponent<Exit>(); Reference(exit,"sprite",goal.GetComponent<SpriteRenderer>());
-        var exitSettings=new SerializedObject(exit); exitSettings.FindProperty("nextScene").stringValue="Level2"; exitSettings.ApplyModifiedPropertiesWithoutUndo();
+        var settings=new SerializedObject(exit); settings.FindProperty("nextScene").stringValue=level==1 ? "Level2" : "Level3"; settings.ApplyModifiedPropertiesWithoutUndo();
         Reference(controller,"exit",exit);
         var manager=new GameObject("PuzzleManager").AddComponent<PuzzleManager>(); Reference(manager,"exit",exit);
-        foreach (var p in new[]{new Vector2Int(5,9),new Vector2Int(9,9),new Vector2Int(9,5)})
-            Prefab("Assets/Prefabs/target.prefab","Objective Target",p.x,p.y).GetComponent<SpriteRenderer>().sortingOrder=-1;
-
-        var regular=Visual("ObjectiveBlock",0,0,new Color(.48f,.29f,.10f),1);regular.tag="Blocks";
-        regular.AddComponent<Push>();
-        PrefabUtility.SaveAsPrefabAsset(regular,"Assets/Prefabs/ObjectiveBlock.prefab"); Object.DestroyImmediate(regular);
-        foreach (var p in new[]{new Vector2Int(1,7),new Vector2Int(13,7),new Vector2Int(8,13)})
-        {
-            var crate=Prefab("Assets/Prefabs/ObjectiveBlock.prefab","Objective Block",p.x,p.y);Reference(crate.GetComponent<Push>(),"tilemap",floor);
+        manager.gameObject.AddComponent<LevelInstructions>(); // Existing R-to-restart behavior, no extra UI/object.
+        var targets=level==1 ? new[]{new Vector2Int(2,2),new Vector2Int(11,3)} : new[]{new Vector2Int(11,2),new Vector2Int(11,4)};
+        var crates=level==1 ? new[]{new Vector2Int(2,4),new Vector2Int(9,3)} : new[]{new Vector2Int(3,3),new Vector2Int(3,4)};
+        foreach(var p in targets) Place("target","Objective Target",p.x,p.y).GetComponent<SpriteRenderer>().sortingOrder=-1;
+        foreach(var p in crates) {
+            var crate=Place("ObjectiveBlock","Objective Block",p.x,p.y);
+            Reference(crate.GetComponent<Push>(),"tilemap",floor);
         }
-        foreach(var p in new[]{new Vector2Int(1,8),new Vector2Int(6,13)})
-        {
-            var bridge=Prefab("Assets/Prefabs/BridgeBlock.prefab","Bridge Block",p.x,p.y);
-            Reference(bridge.GetComponent<Push>(),"tilemap",floor);
-            bridge.GetComponent<SpriteRenderer>().sortingOrder=1;
-        }
-        foreach(var p in new[]{new Vector2Int(4,7),new Vector2Int(10,7)})
-            Prefab("Assets/Prefabs/Hole.prefab","Hole",p.x,p.y);
-
-        var wall=new GameObject("PermeableWall");wall.tag="Vents";wall.AddComponent<PermeableWall>();
-        PrefabUtility.SaveAsPrefabAsset(wall,"Assets/Prefabs/PermeableWall.prefab");Object.DestroyImmediate(wall);
-        for(int y=5;y<=9;y++) if(y!=7) foreach(int x in new[]{4,10}) Prefab("Assets/Prefabs/PermeableWall.prefab","Permeable Wall",x,y);
-        foreach(int x in new[]{5,6,8,9}) Prefab("Assets/Prefabs/PermeableWall.prefab","Permeable Wall",x,10);
-        for(int x=5;x<=9;x++) Prefab("Assets/Prefabs/PermeableWall.prefab","Permeable Wall",x,4);
-        foreach(var p in new[]{new Vector2Int(0,9),new Vector2Int(14,9)}) Prefab("Assets/Prefabs/Cooler.prefab","Cooler",p.x,p.y);
-        Prefab("Assets/Prefabs/Heater.prefab","Heater",5,0);
-        foreach(var p in new[]{new Vector2Int(0,5),new Vector2Int(14,5),new Vector2Int(9,0)}) Prefab("Assets/Prefabs/Drain.prefab","Drain",p.x,p.y);
-        foreach (var w in Object.FindObjectsByType<PermeableWall>())
-            floor.SetTile(floor.WorldToCell(w.transform.position), null);
-        for(int x=4;x<=10;x++) for(int y=-1;y<=4;y++)
-            if(x==4 || x==10 || y==-1 || y==4)
-                Prefab("Assets/Prefabs/SolidWall.prefab",$"Goal Room Wall ({x}, {y})",x,y);
-        new GameObject("Level Controls",typeof(LevelInstructions));
-        EditorSceneManager.SaveScene(scene,"Assets/Scenes/Level1.unity");
-        var scenes=EditorBuildSettings.scenes.ToList();
-        scenes.RemoveAll(s=>s.path=="Assets/Scenes/Level1.unity");
-        scenes.Insert(0,new EditorBuildSettingsScene("Assets/Scenes/Level1.unity",true));
-        EditorBuildSettings.scenes=scenes.ToArray();AssetDatabase.SaveAssets();
-        Debug.Log("LEVEL1_BUILD_OK");
+        int drainX=level==1 ? 9 : 12;
+        Place("Drain","Drain - puzzle rooms",drainX,5);
+        Place("Drain","Drain - goal room",drainX,goalRow);
+        EditorSceneManager.SaveScene(scene,$"Assets/Scenes/Level{level}.unity");
     }
 }

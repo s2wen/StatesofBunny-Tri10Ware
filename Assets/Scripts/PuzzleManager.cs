@@ -14,10 +14,15 @@ public class PuzzleManager : MonoBehaviour
         targets = FindObjectsByType<BlockTarget>();
         blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Push.BlockSettled += Check;
+        BlockTarget.TargetSettled += Check;
         Check();
     }
 
-    void OnDestroy() => Push.BlockSettled -= Check;
+    void OnDestroy()
+    {
+        Push.BlockSettled -= Check;
+        BlockTarget.TargetSettled -= Check;
+    }
 
     private void Check(){
         

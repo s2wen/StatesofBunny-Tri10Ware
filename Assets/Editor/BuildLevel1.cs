@@ -153,6 +153,8 @@ public static class BuildLevel1
         var exit = goal.AddComponent<Exit>(); Reference(exit,"sprite",goal.GetComponent<SpriteRenderer>());
         var settings=new SerializedObject(exit); settings.FindProperty("nextScene").stringValue=level==1 ? "Level2" : "Level3"; settings.ApplyModifiedPropertiesWithoutUndo();
         Reference(controller,"exit",exit);
+        var loader=Prefab("Assets/Prefabs/LevelLoader.prefab","LevelLoader",0,0).GetComponent<LevelLoader>();
+        Reference(exit,"levelLoader",loader);
         var manager=new GameObject("PuzzleManager").AddComponent<PuzzleManager>(); Reference(manager,"exit",exit);
         manager.gameObject.AddComponent<LevelInstructions>(); // Existing R-to-restart behavior, no extra UI/object.
         var targets=level==1 ? new[]{new Vector2Int(2,2),new Vector2Int(11,3)} : new[]{new Vector2Int(11,2),new Vector2Int(11,4)};

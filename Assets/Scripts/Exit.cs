@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Exit : MonoBehaviour
 {
+    [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Color closedColor = Color.gray;
     [SerializeField] private Color openColor = Color.white;
@@ -16,6 +17,7 @@ public class Exit : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake(){
         player = FindObjectsByType<PlayerController>()[0];
+        if (!levelLoader) levelLoader = FindAnyObjectByType<LevelLoader>();
         SetOpen(false);
     }
 
@@ -41,7 +43,8 @@ public class Exit : MonoBehaviour
                 Debug.Log("All levels completed!");
                 return;
             }
-            if (!string.IsNullOrEmpty(nextScene)) SceneManager.LoadScene(nextScene);
+            if (levelLoader) levelLoader.LoadLevel(nextScene);
+            else if (!string.IsNullOrEmpty(nextScene)) SceneManager.LoadScene(nextScene);
             else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         }
         

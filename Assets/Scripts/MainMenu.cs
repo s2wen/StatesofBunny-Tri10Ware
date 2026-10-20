@@ -7,11 +7,9 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject playButton;
-    [SerializeField] private GameObject creditsButton;
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync("Level1");
+        SceneManager.LoadSceneAsync("PlayerMovement");
     }
 
     public void Credits()
@@ -19,10 +17,9 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync("Credits");
     }
 
-    void Start()
+    public void MainMenuButton()
     {
-        playButton.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-        creditsButton.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+        SceneManager.LoadSceneAsync("Main Menu");
     }
 
 }

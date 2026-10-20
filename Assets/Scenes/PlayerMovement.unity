@@ -2023,6 +2023,7 @@ GameObject:
   - component: {fileID: 1204993229}
   - component: {fileID: 1204993230}
   - component: {fileID: 1204993231}
+  - component: {fileID: 1204993232}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2125,6 +2126,7 @@ MonoBehaviour:
   melting: {fileID: 8300000, guid: a0a7fce7959ac3e4198dd30fe9303ee8, type: 3}
   boiling: {fileID: 8300000, guid: 9e9a116a2feeeec458b6341a5064e826, type: 3}
   condensing: {fileID: 8300000, guid: 38dab8c28a5943f448aeed04bffb52b2, type: 3}
+  drainSound: {fileID: 0}
   movementLockedUntil: 0
   tilemap: {fileID: 1035394395}
 --- !u!61 &1204993229
@@ -2212,6 +2214,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d04fc4ea6a7f417fb0baa06f0fac715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributes
+--- !u!95 &1204993232
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204993223}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8d83fb0f35aa34e3395c692daeafb6fb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1636615484
 PrefabInstance:
   m_ObjectHideFlags: 0

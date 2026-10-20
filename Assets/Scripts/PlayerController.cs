@@ -1,22 +1,42 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Exit exit;
-    [SerializeField] private AudioClip solidMove;
-    [SerializeField] private AudioClip liquidMove;
-    [SerializeField] private AudioClip gasMove;
-    [SerializeField] private AudioClip blockMove;
-    [SerializeField] private AudioClip freezing;
-    [SerializeField] private AudioClip melting;
-    [SerializeField] private AudioClip boiling;
-    [SerializeField] private AudioClip condensing;
-    [SerializeField] private AudioClip drainSound;
+
+    [SerializeField]
+    private AudioClip solidMove;
+
+    [SerializeField]
+    private AudioClip liquidMove;
+
+    [SerializeField]
+    private AudioClip gasMove;
+
+    [SerializeField]
+    private AudioClip blockMove;
+
+    [SerializeField]
+    private AudioClip freezing;
+
+    [SerializeField]
+    private AudioClip melting;
+
+    [SerializeField]
+    private AudioClip boiling;
+
+    [SerializeField]
+    private AudioClip condensing;
+
+    [SerializeField]
+    private AudioClip drainSound;
     private GameObject[] Blocks;
     private GameObject[] Vents;
     private GameObject[] Airflows;
@@ -28,18 +48,27 @@ public class PlayerController : MonoBehaviour
 
     private PlayerAttributes playerState;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
     [SerializeField]
     private Tilemap tilemap;
 
     private Drain destination;
 
+    private string previousAnim;
+    private const string SolidFrontAnim = "front_solid_animation";
+    private const string SolidSideAnim = "side_solid_animation";
+    private const string LiquidFrontAnim = "front_liquid_animation";
+    private const string LiquidSideAnim = "side_liquid_animation";
+    private const string GasFrontAnim = "front_gas_animation";
+    private const string GasSideAnim = "side_gas_animation";
 
     void Awake()
     {
         controls = new InputSystem_Actions();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -70,11 +99,10 @@ public class PlayerController : MonoBehaviour
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
         Vents = GameObject.FindGameObjectsWithTag("Vents");
         Airflows = GameObject.FindGameObjectsWithTag("Airflows");
-        Debug.Log($"AirFlows is {Airflows.Length}");
         playerState = GetComponent<PlayerAttributes>();
-        Debug.Log("Current State: " + playerState.getState());
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
         controls.Player.Interact.performed += ctx => ChangeState();
+        previousAnim = GasFrontAnim;
     }
 
     private void ChangeState()
@@ -82,14 +110,6 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = playerState.getColor();
         Debug.Log("Current State:" + playerState.getState());
     }
-
-    /**
-        snap-to-tile movement w/o animation
-    **/
-    // private void Move(Vector2 direction){
-    //     if(canMove(direction))  transform.position += (Vector3)direction;
-    //     Debug.Log("move " + direction);
-    // }
 
     /**
         animated movement
@@ -128,32 +148,10 @@ public class PlayerController : MonoBehaviour
     {
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
 
-        /*
-        if (playerState.getFlight())
-        {
-            //smth to do with moving balloons here or whatever
-
-            return true;
-        }
-        */
-
-        // foreach (var v in Vents)
-        // {
-        //     if (Vector2Int.RoundToInt(v.transform.position) == target)
-        //     {
-        //         if (playerState.getSize() == 0.5f)
-        //         {
-        //             return true;
-        //         }
-        //         else
-        //         {
-        //             return false;
-        //         }
-        //     }
-        // }
         foreach (var b in Blocks)
         {
-            if(playerState.getState() == States.Gas) break;
+            if (playerState.getState() == States.Gas)
+                break;
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
@@ -194,6 +192,54 @@ public class PlayerController : MonoBehaviour
         return true; //TODO: check player state and which tile is being moved into
     }
 
+    private void handleAnimation(Vector2 direction)
+    {
+        string anim = previousAnim;
+        if (direction.x != 0)
+        {
+            spriteRenderer.flipX = direction.x > 0;
+            spriteRenderer.flipY = false;
+            switch (playerState.getState())
+            {
+                case States.Solid:
+                    anim = SolidSideAnim;
+                    break;
+                case States.Liquid:
+                    anim = LiquidSideAnim;
+                    break;
+                case States.Gas:
+                    anim = GasSideAnim;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (direction.y != 0)
+        {
+            spriteRenderer.flipX = false;
+            spriteRenderer.flipY = direction.y > 0;
+            switch (playerState.getState())
+            {
+                case States.Solid:
+                    anim = SolidFrontAnim;
+                    break;
+                case States.Liquid:
+                    anim = LiquidFrontAnim;
+                    break;
+                case States.Gas:
+                    anim = GasFrontAnim;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        AnimatorStateInfo currentAnim = animator.GetCurrentAnimatorStateInfo(0);
+        if (!currentAnim.IsName(anim))
+            animator.Play(anim);
+        previousAnim = anim;
+    }
+
     private IEnumerator MoveRoutine(Vector2 direction)
     {
         isMoving = true;
@@ -206,6 +252,7 @@ public class PlayerController : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
+            handleAnimation(direction);
             yield return null;
         }
 
@@ -287,8 +334,17 @@ public class PlayerController : MonoBehaviour
                     destination = drain.moveNext();
                     StopAllCoroutines();
                     isMoving = false;
+                    transform.position = new Vector3(
+                        destination.getPos().x,
+                        destination.getPos().y,
+                        transform.position.z
+                    );
                     AudioSource.PlayClipAtPoint(drainSound, transform.position);
-                    transform.position = new Vector3(destination.getPos().x, destination.getPos().y, transform.position.z);
+                    transform.position = new Vector3(
+                        destination.getPos().x,
+                        destination.getPos().y,
+                        transform.position.z
+                    );
                 }
                 break;
         }

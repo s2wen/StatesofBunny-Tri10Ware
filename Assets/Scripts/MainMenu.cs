@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
@@ -21,5 +20,4 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("Main Menu");
     }
-
 }

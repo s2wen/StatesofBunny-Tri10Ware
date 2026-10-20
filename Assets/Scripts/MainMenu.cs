@@ -1,27 +1,23 @@
-using TMPro; // Required if you need to reference TMP text elements specifically
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // Required for the Button component
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField]
-    private Button startButton; // should never be null
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    public void PlayGame()
     {
-        startButton.onClick.AddListener(StartGame);
+        SceneManager.LoadSceneAsync("PlayerMovement");
     }
 
-    private void StartGame()
+    public void Credits()
     {
-        Debug.Log("I will now load the level");
-        // SceneManager.LoadScene("Level", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync("Credits");
     }
 
-    private void OnDestroy()
+    public void MainMenuButton()
     {
-        startButton.onClick.RemoveListener(StartGame);
+        SceneManager.LoadSceneAsync("Main Menu");
     }
 }

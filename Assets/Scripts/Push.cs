@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Tilemaps;
 
 public class Push : MonoBehaviour
 {
     public static event System.Action BlockSettled;
     
+    [SerializeField]
+    private Tilemap tilemap;
+
     private GameObject[] Blocks;
     private GameObject[] Vents;
+    
     private float duration = 0.1f;
     private bool isMoving;
 
@@ -52,7 +57,14 @@ public class Push : MonoBehaviour
                 
             }
         }
-        return true; //TODO: check player state and which tile is being moved into
+
+        Vector3Int targetTile = tilemap.WorldToCell((Vector3Int)Vector3Int.RoundToInt(endPos));
+        if (!tilemap.HasTile(targetTile))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private IEnumerator MoveRoutine(Vector2 direction)

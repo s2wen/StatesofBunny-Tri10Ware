@@ -1,11 +1,42 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Exit exit;
+
+    [SerializeField]
+    private AudioClip solidMove;
+
+    [SerializeField]
+    private AudioClip liquidMove;
+
+    [SerializeField]
+    private AudioClip gasMove;
+
+    [SerializeField]
+    private AudioClip blockMove;
+
+    [SerializeField]
+    private AudioClip freezing;
+
+    [SerializeField]
+    private AudioClip melting;
+
+    [SerializeField]
+    private AudioClip boiling;
+
+    [SerializeField]
+    private AudioClip condensing;
+
+    [SerializeField]
+    private AudioClip drainSound;
     private GameObject[] Blocks;
     private GameObject[] Vents;
     private GameObject[] Airflows;
@@ -13,6 +44,7 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions controls;
     private float duration = 0.1f;
     private bool isMoving;
+    public float movementLockedUntil;
 
     private PlayerAttributes playerState;
     private SpriteRenderer spriteRenderer;
@@ -39,6 +71,19 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    void Update()
+    {
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene("Main Menu");
+        }
+    }
+
     private void OnEnable()
     {
         controls.Enable();
@@ -62,7 +107,6 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeState()
     {
-        playerState.setState((States)(((int)playerState.getState() + 1) % 3));
         spriteRenderer.color = playerState.getColor();
         Debug.Log("Current State:" + playerState.getState());
     }
@@ -72,6 +116,21 @@ public class PlayerController : MonoBehaviour
     **/
     private void Move(Vector2 direction)
     {
+        if (Time.time < movementLockedUntil)
+            return;
+
+        if (playerState.getState() == States.Solid)
+        {
+            AudioSource.PlayClipAtPoint(solidMove, transform.position);
+        }
+        else if (playerState.getState() == States.Liquid)
+        {
+            AudioSource.PlayClipAtPoint(liquidMove, transform.position);
+        }
+        else if (playerState.getState() == States.Gas)
+        {
+            AudioSource.PlayClipAtPoint(gasMove, transform.position);
+        }
         if (isMoving)
             return;
 
@@ -91,6 +150,8 @@ public class PlayerController : MonoBehaviour
 
         foreach (var b in Blocks)
         {
+            if (playerState.getState() == States.Gas)
+                break;
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
@@ -100,6 +161,7 @@ public class PlayerController : MonoBehaviour
                     && blockPush.Move(direction)
                 )
                 {
+                    AudioSource.PlayClipAtPoint(blockMove, transform.position);
                     return true;
                 }
                 else
@@ -237,21 +299,29 @@ public class PlayerController : MonoBehaviour
             case "Cooler":
                 if (currentState == States.Gas)
                 {
+                    movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Liquid);
+                    AudioSource.PlayClipAtPoint(condensing, transform.position);
                 }
                 else if (currentState == States.Liquid)
                 {
+                    movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Solid);
+                    AudioSource.PlayClipAtPoint(freezing, transform.position);
                 }
                 break;
             case "Heater":
                 if (currentState == States.Liquid)
                 {
+                    movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Gas);
+                    AudioSource.PlayClipAtPoint(boiling, transform.position);
                 }
                 else if (currentState == States.Solid)
                 {
+                    movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Liquid);
+                    AudioSource.PlayClipAtPoint(melting, transform.position);
                 }
                 break;
             case "Drain":
@@ -264,6 +334,12 @@ public class PlayerController : MonoBehaviour
                     destination = drain.moveNext();
                     StopAllCoroutines();
                     isMoving = false;
+                    transform.position = new Vector3(
+                        destination.getPos().x,
+                        destination.getPos().y,
+                        transform.position.z
+                    );
+                    AudioSource.PlayClipAtPoint(drainSound, transform.position);
                     transform.position = new Vector3(
                         destination.getPos().x,
                         destination.getPos().y,

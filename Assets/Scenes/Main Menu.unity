@@ -308,7 +308,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Christopher Kim - SFX / Music / UI
+  m_text: 'Christopher Kim - SFX / Music / UI
+
+    Alex Le - Programmer
+
+    Shuwen
+    Wen - Programmer
+
+    Selina Chen - Artist
+
+    Alvin Ao - Programmer / Animator
+
+    Akshetha
+    Vishnu Prasad Dhivya - Level Designer / Programmer'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d6075d7312689974184c6ba3613806d5, type: 2}
   m_sharedMaterial: {fileID: 1748808265549512630, guid: d6075d7312689974184c6ba3613806d5, type: 2}
@@ -350,7 +362,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: 98.16
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -495,7 +507,7 @@ RectTransform:
   m_GameObject: {fileID: 1090485257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.09000001, y: 0.09000001, z: 0.09000001}
+  m_LocalScale: {x: 0.050000004, y: 0.050000004, z: 0.050000004}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1251507402}
@@ -725,6 +737,7 @@ GameObject:
   - component: {fileID: 1723633480}
   - component: {fileID: 1723633483}
   - component: {fileID: 1723633484}
+  - component: {fileID: 1723633485}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -863,6 +876,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3c206b5a97d485b8370b4b8298435c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+--- !u!114 &1723633485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723633479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6199f9e4edde4cc9b5cc19dab867c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenu
 --- !u!1 &1882827766
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +970,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1723633484}
+      - m_Target: {fileID: 1723633485}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1

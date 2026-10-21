@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync("PlayerMovement");
+        SceneManager.LoadSceneAsync("Tutorial");
     }
 
     public void Credits()

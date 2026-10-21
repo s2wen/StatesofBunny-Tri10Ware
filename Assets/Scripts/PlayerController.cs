@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
     private Drain destination;
 
     private string previousAnim;
+    private Vector2 facing = Vector2.down;
     private const string SolidFrontAnim = "front_solid_animation";
     private const string SolidSideAnim = "side_solid_animation";
     private const string LiquidFrontAnim = "front_liquid_animation";
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        playerState = GetComponent<PlayerAttributes>();
     }
 
     void Update()
@@ -105,7 +107,8 @@ public class PlayerController : MonoBehaviour
         playerState = GetComponent<PlayerAttributes>();
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
         controls.Player.Interact.performed += ctx => ChangeState();
-        previousAnim = GasFrontAnim;
+        previousAnim = SolidFrontAnim;
+        RefreshAppearance();
     }
 
     private void ChangeState()
@@ -113,7 +116,7 @@ public class PlayerController : MonoBehaviour
         // Designed boards retain their form-cycle control; legacy scenes retain main's rules.
         if (tilemap && tilemap.GetComponent<LevelBoard>())
             playerState.setState((States)(((int)playerState.getState() + 1) % 3));
-        spriteRenderer.color = playerState.getColor();
+        RefreshAppearance();
         Debug.Log("Current State:" + playerState.getState());
     }
 
@@ -123,8 +126,7 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector2 direction)
     {
         if (Time.time < movementLockedUntil || direction.sqrMagnitude < 0.01f || isMoving) return;
-        if (tilemap && tilemap.GetComponent<LevelBoard>())
-            direction = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
+        direction = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
                 ? new Vector2(Mathf.Sign(direction.x), 0) : new Vector2(0, Mathf.Sign(direction.y));
         switch (playerState.getState())
         {
@@ -133,8 +135,8 @@ public class PlayerController : MonoBehaviour
             case States.Gas: PlaySound(gasMove); break;
         }
 
-        if (isMoving)
-            return;
+        facing = direction;
+        RefreshAppearance();
 
         if (canMove(direction))
         {
@@ -209,6 +211,13 @@ public class PlayerController : MonoBehaviour
         if (clip) AudioSource.PlayClipAtPoint(clip, transform.position);
     }
 
+    private void RefreshAppearance()
+    {
+        bool animated = animator && animator.runtimeAnimatorController;
+        spriteRenderer.color = animated ? Color.white : playerState.getColor();
+        if (animated) handleAnimation(facing);
+    }
+
     private void handleAnimation(Vector2 direction)
     {
         if (!animator || !animator.runtimeAnimatorController) return;
@@ -277,7 +286,7 @@ public class PlayerController : MonoBehaviour
         transform.position = endPos;
         isMoving = false;
 
-        exit.ReachExit();
+        if (exit) exit.ReachExit();
     }
 
     private IEnumerator FailMoveRoutine(Vector2 direction)
@@ -361,7 +370,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
-        spriteRenderer.color = playerState.getColor();
+        RefreshAppearance();
         Debug.Log($"Changed state to {playerState.getState()}");
     }
 

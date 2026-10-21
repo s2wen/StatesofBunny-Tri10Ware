@@ -84,9 +84,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -3919873737489175415, guid: 0d776728c2ac84a0392ea8112fbcfe4a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   melting: {fileID: 8300000, guid: a0a7fce7959ac3e4198dd30fe9303ee8, type: 3}
   boiling: {fileID: 8300000, guid: 9e9a116a2feeeec458b6341a5064e826, type: 3}
   condensing: {fileID: 8300000, guid: 38dab8c28a5943f448aeed04bffb52b2, type: 3}
-  drainSound: {fileID: 0}
+  drainSound: {fileID: 8300000, guid: 99fade0379899444b840addfcd157278, type: 3}
   movementLockedUntil: 0
   tilemap: {fileID: 0}
 --- !u!61 &9189081160852936320
@@ -164,7 +164,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.65, y: 0.65}
   m_EdgeRadius: 0
 --- !u!50 &4767160741521287280
 Rigidbody2D:

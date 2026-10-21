@@ -88,3 +88,13 @@ Logs: /tmp/merge-import.log, /tmp/merge-playtest.log, /tmp/merge-menu-test.log. 
 ## Follow-up merge with origin/main
 
 Resolved the incoming menu/tutorial update while preserving the active level-design Tutorial, all four puzzle scenes and the build sequence byte-for-byte. TutorialMainBackup now contains the incoming revised Tutorial, with its exit explicitly linked to Level1. Accepted upstream folder metadata and deletion of the unused MainMenu scene (the active scene is Main Menu). Retained the updated credits, close-button artwork and Ending button label; routed menu buttons to the existing valid MainMenu component instead of keeping incoming duplicate components with a stale script GUID.
+
+## Shared player prefab — October 21, 2026
+
+Tutorial, Level1, Level2, Level2.5, Level3 and PlayerMovementLevelDesign now use linked instances of Assets/Prefabs/Player.prefab. PlayerMovement and TutorialMainBackup already used that prefab. Spawn positions, floor/exit references and all other scene objects were preserved; the development-only BunnySpriteTesting scene was not converted. The level builder now creates the same prefab instead of a standalone square player.
+
+The shared prefab uses the bunny's solid sprite as its editor preview, retains the six-state animation controller and movement sounds, adds the drain sound, and uses the existing designed levels' 0.65-unit collision box. PlayerController keeps movement cardinal on the grid, refreshes form animations immediately, leaves animated artwork untinted, and preserves directional sprite flipping. Placeholder players without an animator retain their color feedback.
+
+Unity validation in /tmp/bunny-prefab-validation confirmed prefab connections and non-null floor/exit references in all eight gameplay/alternate scenes. All four puzzle solutions passed with the prefab player, including animation selection, untinted artwork, temperature-only solutions for Level2 and Level2.5, bridge locking, movable targets, drains, and transition to Ending. Logs: /tmp/player-prefab-conversion.log and /tmp/player-prefab-playtest.log.
+
+A separate Tutorial Play Mode test sent actual Input System keyboard events: D moved exactly one tile, simultaneous D/W remained cardinal and grid-aligned, and W moved one tile upward with the matching front animation and upward sprite flip. A rendered preview confirmed the bunny artwork displays correctly. Background input routing was enabled only in the isolated test harness. Log: /tmp/player-prefab-input.log; preview: /tmp/bunny-prefab-preview.png.

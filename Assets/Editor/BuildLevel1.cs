@@ -150,11 +150,8 @@ public static class BuildLevel1
         cameraGO.transform.position = new Vector3(7,level==1 ? -6 : -7.5f,-10);
         var camera = cameraGO.GetComponent<Camera>(); camera.orthographic=true; camera.orthographicSize=level==1 ? 7 : 8;
         camera.clearFlags=CameraClearFlags.SolidColor; camera.backgroundColor=new Color(.12f,.10f,.18f);
-        var player = Visual("Player",2,level==1 ? -5 : -4,Color.red,2); player.tag="Player";
-        player.AddComponent<PlayerAttributes>();
-        var controller = player.AddComponent<PlayerController>(); Reference(controller,"tilemap",floor);
-        player.AddComponent<BoxCollider2D>().size = new Vector2(.65f,.65f);
-        var body=player.AddComponent<Rigidbody2D>(); body.gravityScale=0; body.constraints=RigidbodyConstraints2D.FreezeRotation;
+        var player = Prefab("Assets/Prefabs/Player.prefab","Player",2,level==1 ? -5 : -4);
+        var controller = player.GetComponent<PlayerController>(); Reference(controller,"tilemap",floor);
         var goal = Visual("Goal",level==1 ? 11 : 10,-goalRow,Color.gray);
         var exit = goal.AddComponent<Exit>(); Reference(exit,"sprite",goal.GetComponent<SpriteRenderer>());
         var settings=new SerializedObject(exit); settings.FindProperty("nextScene").stringValue=level==1 ? "Level2" : "Level3"; settings.ApplyModifiedPropertiesWithoutUndo();

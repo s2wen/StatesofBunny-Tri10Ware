@@ -34,6 +34,11 @@ public static class VerifyLevel1
     static VerifyLevel1() { EditorApplication.update += Tick; }
     public static void Run()
     {
+        foreach(var name in SceneNames) {
+            EditorSceneManager.OpenScene("Assets/Scenes/"+name+".unity");
+            var player=UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            Assert(player && PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(player.gameObject)=="Assets/Prefabs/Player.prefab","Player is not linked to the shared prefab in "+name);
+        }
         EditorSceneManager.OpenScene("Assets/Scenes/Level1.unity");
         SessionState.SetBool("VerifyLevel1.Active",true);
         EditorApplication.EnterPlaymode();
@@ -91,6 +96,7 @@ public static class VerifyLevel1
     }
     static void Inspect(PlayerController player,Exit exit)
     {
+        Assert(player.GetComponent<Animator>() && player.GetComponent<Animator>().runtimeAnimatorController,"Missing bunny animator");
         Assert(!exit.IsOpen,"Goal initially open");
         Assert(UnityEngine.Object.FindObjectsByType<BlockTarget>().Length==(level==3?3:2),"Wrong target count");
         Assert(UnityEngine.Object.FindObjectsByType<Push>().Count(p=>p.FillsHoles)==((level==3 || level==25)?2:0),"Unexpected bridge blocks");
@@ -172,6 +178,11 @@ public static class VerifyLevel1
             if(pending) {
                 Assert(Vector3.Distance(player.transform.position,expected)<.01f,$"Level{level} move {index-1}: expected {expected}, got {player.transform.position}");
                 if(completeRoute) Assert((int)player.GetComponent<PlayerAttributes>().getState()==expectedState,$"Temperature state mismatch at move {index-1}");
+                var visual=player.GetComponent<SpriteRenderer>();
+                Assert(visual.color==Color.white,"Bunny artwork was tinted by placeholder form colors");
+                var last=actions[index-1];
+                string animation=(last.dx==0 ? "front_" : "side_")+player.GetComponent<PlayerAttributes>().getState().ToString().ToLowerInvariant()+"_animation";
+                Assert(player.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName(animation),"Incorrect bunny animation: "+animation);
                 pending=false;
                 if(completeRoute && index==objectiveMoves) {
                     Assert(exit.IsOpen,"Temperature-only solution did not unlock goal");

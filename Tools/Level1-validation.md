@@ -84,3 +84,7 @@ Validation on the merged project in an isolated Unity 6000.4.1f1 copy:
 - Original gameplay transform positions in all four puzzle scenes were preserved. Unity's headless save produced zero-scale canvas overrides; those overrides were removed so the fade canvases inherit the prefab's unit scale.
 
 Logs: /tmp/merge-import.log, /tmp/merge-playtest.log, /tmp/merge-menu-test.log. Unity's editor-only SearchDatabase indexing exception appeared during validation; it did not prevent compilation or successful gameplay tests.
+
+## Follow-up merge with origin/main
+
+Resolved the incoming menu/tutorial update while preserving the active level-design Tutorial, all four puzzle scenes and the build sequence byte-for-byte. TutorialMainBackup now contains the incoming revised Tutorial, with its exit explicitly linked to Level1. Accepted upstream folder metadata and deletion of the unused MainMenu scene (the active scene is Main Menu). Retained the updated credits, close-button artwork and Ending button label; routed menu buttons to the existing valid MainMenu component instead of keeping incoming duplicate components with a stale script GUID.

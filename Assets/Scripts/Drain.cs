@@ -10,9 +10,9 @@ public class Drain : MonoBehaviour
     private int idx;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void OnEnable()
     {
-        drainList.Add(this);
+        if (!drainList.Contains(this)) drainList.Add(this);
         idx = drainList.Count - 1;
     }
 
@@ -27,7 +27,7 @@ public class Drain : MonoBehaviour
         return GetComponent<Collider2D>().bounds.center;
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         drainList.Remove(this);
     }

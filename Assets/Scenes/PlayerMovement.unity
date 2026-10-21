@@ -530,6 +530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Push
   tilemap: {fileID: 1035394395}
+  fillsHoles: 0
 --- !u!1 &850851966
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Push
   tilemap: {fileID: 1035394395}
+  fillsHoles: 0
 --- !u!50 &850851968
 Rigidbody2D:
   serializedVersion: 5
@@ -2285,6 +2287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Push
   tilemap: {fileID: 1035394395}
+  fillsHoles: 0
 --- !u!1001 &1368108876101331278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2341,6 +2344,10 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1035394395}
+    - target: {fileID: 4312113905819523282, guid: fa54721bed03b4dfeb8b6d8221dddd4c, type: 3}
+      propertyPath: drainSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 99fade0379899444b840addfcd157278, type: 3}
     - target: {fileID: 8224848447024106969, guid: fa54721bed03b4dfeb8b6d8221dddd4c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2418,6 +2425,10 @@ PrefabInstance:
     - target: {fileID: 3432840059069272651, guid: 6bbc96e4dbae64083a5f8b7e7bd0e578, type: 3}
       propertyPath: m_Name
       value: Exit
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696516891795456019, guid: 6bbc96e4dbae64083a5f8b7e7bd0e578, type: 3}
+      propertyPath: nextScene
+      value: Level1
       objectReference: {fileID: 0}
     - target: {fileID: 7696516891795456019, guid: 6bbc96e4dbae64083a5f8b7e7bd0e578, type: 3}
       propertyPath: levelLoader

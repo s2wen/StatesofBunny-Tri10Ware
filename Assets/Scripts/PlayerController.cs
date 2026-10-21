@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private GameObject[] Blocks;
     private GameObject[] Vents;
     private GameObject[] Airflows;
+    private BlockTarget[] targets;
 
     private InputSystem_Actions controls;
     private float duration = 0.1f;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private Tilemap tilemap;
+
+    public Tilemap FloorTilemap => tilemap;
 
     private Drain destination;
 
@@ -71,7 +74,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.rKey.wasPressedThisFrame)
+        if (Keyboard.current == null) return;
+        if (Keyboard.current.rKey.wasPressedThisFrame && !FindAnyObjectByType<LevelInstructions>())
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -95,6 +99,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Blocks = GameObject.FindGameObjectsWithTag("Blocks");
+        targets = FindObjectsByType<BlockTarget>();
         Vents = GameObject.FindGameObjectsWithTag("Vents");
         Airflows = GameObject.FindGameObjectsWithTag("Airflows");
         playerState = GetComponent<PlayerAttributes>();
@@ -105,6 +110,9 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeState()
     {
+        // Designed boards retain their form-cycle control; legacy scenes retain main's rules.
+        if (tilemap && tilemap.GetComponent<LevelBoard>())
+            playerState.setState((States)(((int)playerState.getState() + 1) % 3));
         spriteRenderer.color = playerState.getColor();
         Debug.Log("Current State:" + playerState.getState());
     }
@@ -114,21 +122,17 @@ public class PlayerController : MonoBehaviour
     **/
     private void Move(Vector2 direction)
     {
-        if (Time.time < movementLockedUntil)
-            return;
+        if (Time.time < movementLockedUntil || direction.sqrMagnitude < 0.01f || isMoving) return;
+        if (tilemap && tilemap.GetComponent<LevelBoard>())
+            direction = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
+                ? new Vector2(Mathf.Sign(direction.x), 0) : new Vector2(0, Mathf.Sign(direction.y));
+        switch (playerState.getState())
+        {
+            case States.Solid: PlaySound(solidMove); break;
+            case States.Liquid: PlaySound(liquidMove); break;
+            case States.Gas: PlaySound(gasMove); break;
+        }
 
-        if (playerState.getState() == States.Solid)
-        {
-            AudioSource.PlayClipAtPoint(solidMove, transform.position);
-        }
-        else if (playerState.getState() == States.Liquid)
-        {
-            AudioSource.PlayClipAtPoint(liquidMove, transform.position);
-        }
-        else if (playerState.getState() == States.Gas)
-        {
-            AudioSource.PlayClipAtPoint(gasMove, transform.position);
-        }
         if (isMoving)
             return;
 
@@ -145,21 +149,25 @@ public class PlayerController : MonoBehaviour
     private bool canMove(Vector2 direction)
     {
         Vector2Int target = Vector2Int.RoundToInt((Vector2)transform.position + direction);
+        if (SolidWall.IsAt(target)) return false;
+        // Match PlayerMovement: missing floor blocks solid/liquid below,
+        // while gas can cross empty space without an additional board/wall gate.
 
         foreach (var b in Blocks)
         {
-            if (playerState.getState() == States.Gas)
+            if (playerState.getState() == States.Gas && !tilemap.GetComponent<LevelBoard>())
                 break;
             if (Vector2Int.RoundToInt(b.transform.position) == target)
             {
                 Push blockPush = b.GetComponent<Push>();
+                if (blockPush && blockPush.IsBridge) continue;
                 if (
                     playerState.getState() == States.Solid
                     && blockPush
                     && blockPush.Move(direction)
                 )
                 {
-                    AudioSource.PlayClipAtPoint(blockMove, transform.position);
+                    PlaySound(blockMove);
                     return true;
                 }
                 else
@@ -168,6 +176,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        // Only the gag scene enables movable targets. Any form can push these markers.
+        foreach (var marker in targets)
+            if (marker && marker.Movable && Vector2Int.RoundToInt(marker.transform.position) == target)
+                return marker.Move(direction, tilemap, Blocks);
 
         // airflow check
         foreach (var a in Airflows)
@@ -181,7 +194,8 @@ public class PlayerController : MonoBehaviour
 
         // void check
         Vector3Int targetTile = tilemap.WorldToCell((Vector3Int)target);
-        if (!tilemap.HasTile(targetTile) && playerState.getState() != States.Gas)
+        if ((!tilemap.HasTile(targetTile) || Hole.IsHoleAt(target)) && !Push.HasBridgeAt(target, Blocks)
+            && playerState.getState() != States.Gas)
         {
             Debug.Log("Can't walk over void");
             return false;
@@ -190,8 +204,14 @@ public class PlayerController : MonoBehaviour
         return true; //TODO: check player state and which tile is being moved into
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip) AudioSource.PlayClipAtPoint(clip, transform.position);
+    }
+
     private void handleAnimation(Vector2 direction)
     {
+        if (!animator || !animator.runtimeAnimatorController) return;
         string anim = previousAnim;
         if (direction.x != 0)
         {
@@ -299,13 +319,13 @@ public class PlayerController : MonoBehaviour
                 {
                     movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Liquid);
-                    AudioSource.PlayClipAtPoint(condensing, transform.position);
+                    PlaySound(condensing);
                 }
                 else if (currentState == States.Liquid)
                 {
                     movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Solid);
-                    AudioSource.PlayClipAtPoint(freezing, transform.position);
+                    PlaySound(freezing);
                 }
                 break;
             case "Heater":
@@ -313,13 +333,13 @@ public class PlayerController : MonoBehaviour
                 {
                     movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Gas);
-                    AudioSource.PlayClipAtPoint(boiling, transform.position);
+                    PlaySound(boiling);
                 }
                 else if (currentState == States.Solid)
                 {
                     movementLockedUntil = Time.time + 1f;
                     playerState.setState(States.Liquid);
-                    AudioSource.PlayClipAtPoint(melting, transform.position);
+                    PlaySound(melting);
                 }
                 break;
             case "Drain":
@@ -337,15 +357,11 @@ public class PlayerController : MonoBehaviour
                         destination.getPos().y,
                         transform.position.z
                     );
-                    AudioSource.PlayClipAtPoint(drainSound, transform.position);
-                    transform.position = new Vector3(
-                        destination.getPos().x,
-                        destination.getPos().y,
-                        transform.position.z
-                    );
+                    PlaySound(drainSound);
                 }
                 break;
         }
+        spriteRenderer.color = playerState.getColor();
         Debug.Log($"Changed state to {playerState.getState()}");
     }
 

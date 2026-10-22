@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
         Airflows = GameObject.FindGameObjectsWithTag("Airflows");
         playerState = GetComponent<PlayerAttributes>();
         controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
-        //controls.Player.Interact.performed += ctx => ChangeState();
+        controls.Player.Interact.performed += ctx => ChangeState();
         previousAnim = SolidFrontAnim;
         RefreshAppearance();
     }

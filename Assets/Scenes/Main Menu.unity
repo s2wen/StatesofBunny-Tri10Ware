@@ -308,19 +308,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Christopher Kim - SFX / Music / UI
+  m_text: 'Christopher Kim - SFX / Music / UI / Artist
 
     Alex Le - Programmer
+    / Level Designer
 
-    Shuwen
-    Wen - Programmer
+    Shuwen Wen - Programmer
 
     Selina Chen - Artist
 
-    Alvin Ao - Programmer / Animator
+    Alvin
+    Ao - Programmer / Animator
 
-    Akshetha
-    Vishnu Prasad Dhivya - Level Designer / Programmer'
+    Akshetha Vishnu Prasad Dhivya - Level Designer
+    / Programmer'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d6075d7312689974184c6ba3613806d5, type: 2}
   m_sharedMaterial: {fileID: 1748808265549512630, guid: d6075d7312689974184c6ba3613806d5, type: 2}

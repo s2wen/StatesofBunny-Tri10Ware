@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "StatesofBunny-Tri10Ware.slnx",
+    "dotnet.defaultSolution": "StatesofBunny.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }

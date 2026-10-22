@@ -324,11 +324,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 440096857848534413, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: m_Name
-      value: Movable Objective Target
+      value: Objective Target
       objectReference: {fileID: 0}
     - target: {fileID: 5643265491883978380, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: movable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6495574201978316665, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1048,11 +1048,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 440096857848534413, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: m_Name
-      value: Movable Objective Target
+      value: Objective Target
       objectReference: {fileID: 0}
     - target: {fileID: 5643265491883978380, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: movable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6495574201978316665, guid: 7f8f14880e227401ea407d4633ac5eb8, type: 3}
       propertyPath: m_LocalPosition.x
